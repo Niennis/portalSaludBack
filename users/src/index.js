@@ -1,13 +1,15 @@
 import express from 'express';
 import usersRoutes from './routes/users.routes.js'
 import cors from 'cors';
+import 'dotenv/config';
 
-const app = express ()
+const PORT = process.env.PORT
 
+const app = express()
 app.use(cors())
 app.use(express.json())
 
 app.use('/api', usersRoutes)
 
-app.listen(3002)
-console.log('Escuchando el puerto 3002');
+app.listen(PORT)
+console.log(`Escuchando el puerto ${PORT}`);

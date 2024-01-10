@@ -1,10 +1,11 @@
 import express from 'express';
 import scheduleRoutes from './routes/schedule.routes.js'
 import cors from 'cors';
+import 'dotenv/config';
+
+const PORT = process.env.PORT
 
 const app = express ()
-const PORT = 3012
-
 app.use(cors())
 app.use(express.json())
 
