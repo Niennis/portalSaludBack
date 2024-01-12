@@ -2,7 +2,7 @@ import { connection } from '../db.js';
 
 export const getAppointments = async (req, res) => {
   try {
-    const data = await connection.query(`SELECT C.id AS 'id', U.nombre AS 'nombre_alumno', U.apellido AS 'apellido_alumno', P.nombre AS 'nombre_profesional', P.apellido AS 'apellido_profesional', E.especialidad AS 'especialidad', U.email AS 'mail_alumno', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita' 
+    const data = await connection.query(`SELECT C.id AS 'id', U.nombre AS 'nombre_alumno', U.apellido AS 'apellido_alumno', P.nombre AS 'nombre_profesional', P.apellido AS 'apellido_profesional', E.especialidad AS 'especialidad', U.email AS 'mail_alumno', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita', U.telefono AS 'telefono_alumno', U.email AS 'email_alumno', C.estado AS "estado"
     FROM Usuarios U
     JOIN Citas C
     ON U.id=C.alumno_id
@@ -24,7 +24,7 @@ export const getAppointments = async (req, res) => {
 export const getAppointment = async (req, res) => {
   const { id } = req.params
   try {
-    const data = await connection.query(`SELECT C.id AS 'id', U.nombre AS 'nombre_alumno', U.apellido AS 'apellido_alumno', P.nombre AS 'nombre_profesional', P.apellido AS 'apellido_profesional', E.especialidad AS 'especialidad', U.email AS 'mail_alumno', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita' 
+    const data = await connection.query(`SELECT C.id AS 'id', U.nombre AS 'nombre_alumno', U.apellido AS 'apellido_alumno', P.nombre AS 'nombre_profesional', P.apellido AS 'apellido_profesional', E.especialidad AS 'especialidad', U.email AS 'mail_alumno', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita', U.telefono AS 'telefono_alumno', U.email AS 'email_alumno', C.estado AS "estado"
     FROM Usuarios U
     JOIN Citas C
     ON U.id=C.alumno_id
