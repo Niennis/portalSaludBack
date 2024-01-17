@@ -24,7 +24,7 @@ export const getSchedule = async (req, res) => {
   const { id } = req.params
   console.log( 'ID', id);
   try {
-    const data = await connection.query(`SELECT H.id AS 'id', U.id AS 'id_profesional', CONCAT(U.nombre, ' ', U.apellido) AS 'nombre_profesional', E.especialidad AS 'especialidad', H.dia_semana AS 'dia_semana', H.hora_inicio AS 'hora_inicio', H.hora_fin AS 'hora_fin'
+    const data = await connection.query(`SELECT H.id AS 'id', U.id AS 'id_profesional', CONCAT(U.nombre, ' ', U.apellido) AS 'nombre_profesional', E.especialidad AS 'especialidad', H.dia_semana AS 'dia_semana', H.hora_inicio AS 'hora_inicio', H.hora_fin AS 'hora_fin', H.start AS 'start', H.end AS 'end'
     FROM Horarios H
     JOIN Usuarios U
     ON H.usuario_id = U.id
