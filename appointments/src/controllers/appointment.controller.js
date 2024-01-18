@@ -46,8 +46,8 @@ export const getAppointment = async (req, res) => {
 }
 
 export const createAppointment = async (req, res) => {
-  const { profesional_id, alumno_id, fecha, hora, estado } = req.body
-  const rows = await connection.query('INSERT INTO Citas (profesional_id, alumno_id, fecha, hora, estado) VALUES (?,?,?,?,?) ', [profesional_id, alumno_id, fecha, hora, estado])
+  const { profesional_id, alumno_id, fecha, hora, hora_fin, estado } = req.body
+  const rows = await connection.query('INSERT INTO Citas (profesional_id, alumno_id, fecha, hora, hora_fin, estado) VALUES (?,?,?,?,?,?) ', [profesional_id, alumno_id, fecha, hora, hora_fin, estado])
 
   res.json({
     id: rows.insertId,
