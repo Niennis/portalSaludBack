@@ -4,11 +4,11 @@ export const getAppointments = async (req, res) => {
   try {
     const data = await connection.query(`SELECT C.id AS 'id', U.nombre AS 'nombre_alumno', U.apellido AS 'apellido_alumno', P.nombre AS 'nombre_profesional', P.apellido AS 'apellido_profesional', E.especialidad AS 'especialidad', U.email AS 'mail_alumno', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita', U.telefono AS 'telefono_alumno', U.email AS 'email_alumno', C.estado AS "estado"
     FROM usuarios U
-    JOIN Citas C
+    JOIN citas C
     ON U.id=C.alumno_id
     JOIN usuarios P
     ON C.profesional_id=P.id
-    JOIN Especialidades E
+    JOIN especialidades E
     ON P.id=E.usuario_id
     WHERE U.tipo_usuario='alumno' AND P.tipo_usuario='profesional'`)
     return res.json({ response: data })
@@ -26,11 +26,11 @@ export const getAppointment = async (req, res) => {
   try {
     const data = await connection.query(`SELECT C.id AS 'id', U.nombre AS 'nombre_alumno', U.apellido AS 'apellido_alumno', P.nombre AS 'nombre_profesional', P.apellido AS 'apellido_profesional', E.especialidad AS 'especialidad', U.email AS 'mail_alumno', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita', U.telefono AS 'telefono_alumno', U.email AS 'email_alumno', C.estado AS "estado"
     FROM usuarios U
-    JOIN Citas C
+    JOIN citas C
     ON U.id=C.alumno_id
     JOIN usuarios P
     ON C.profesional_id=P.id
-    JOIN Especialidades E
+    JOIN especialidades E
     ON P.id=E.usuario_id
     WHERE U.tipo_usuario='alumno' AND P.tipo_usuario='profesional' and C.id = ? `, [id])
     console.log(data)
@@ -47,7 +47,7 @@ export const getAppointment = async (req, res) => {
 
 export const createAppointment = async (req, res) => {
   const { profesional_id, alumno_id, fecha, hora, hora_fin, estado } = req.body
-  const rows = await connection.query('INSERT INTO Citas (profesional_id, alumno_id, fecha, hora, hora_fin, estado) VALUES (?,?,?,?,?,?) ', [profesional_id, alumno_id, fecha, hora, hora_fin, estado])
+  const rows = await connection.query('INSERT INTO citas (profesional_id, alumno_id, fecha, hora, hora_fin, estado) VALUES (?,?,?,?,?,?) ', [profesional_id, alumno_id, fecha, hora, hora_fin, estado])
 
   res.json({
     id: rows.insertId,
@@ -64,10 +64,10 @@ export const updateAppointment = async (req, res) => {
   const { id } = req.params
   const { profesional_id, alumno_id, fecha, hora, hora_fin, estado } = req.body
 
-  const [selectedCita] = await connection.query('SELECT * FROM Citas WHERE id = ? ', [id])
+  const [selectedCita] = await connection.query('SELECT * FROM citas WHERE id = ? ', [id])
   console.log('selectedCita', selectedCita);
   try {
-    const data = await connection.query('UPDATE Citas SET profesional_id = ?, alumno_id = ?, fecha = ?, hora= ?, hora_fin= ?, estado = ? WHERE id = ?', [profesional_id, alumno_id, fecha, hora, hora_fin, estado, id])
+    const data = await connection.query('UPDATE citas SET profesional_id = ?, alumno_id = ?, fecha = ?, hora= ?, hora_fin= ?, estado = ? WHERE id = ?', [profesional_id, alumno_id, fecha, hora, hora_fin, estado, id])
 
     if (data.length <= 0) return res.status(404).json({ message: 'Cita no encontrada' })
     return res.json(data[0])
@@ -84,7 +84,7 @@ export const deleteAppointment = async (req, res) => {
   const { id } = req.params
   const { estado } = req.body
 
-  const data = await connection.query('UPDATE Citas SET estado = ? WHERE id = ? ', [estado, id])
+  const data = await connection.query('UPDATE citas SET estado = ? WHERE id = ? ', [estado, id])
 
   console.log(data);
   try {
@@ -105,11 +105,11 @@ export const getAppointmentsSimple = async (req, res) => {
   try {
     const data = await connection.query(`SELECT C.id AS 'id', E.especialidad AS 'especialidad', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita', C.hora_fin AS 'hora_fin', C.estado AS "estado", U.id AS 'id_patient', P.id AS 'id_professional'
     FROM usuarios U
-    JOIN Citas C
+    JOIN citas C
     ON U.id=C.alumno_id
     JOIN usuarios P
     ON C.profesional_id=P.id
-    JOIN Especialidades E
+    JOIN especialidades E
     ON P.id=E.usuario_id
     WHERE U.tipo_usuario='alumno' AND P.tipo_usuario='profesional'`)
     return res.json(data)
@@ -128,11 +128,11 @@ export const getAppointmentsSimpleUser = async (req, res) => {
   try {
     const data = await connection.query(`SELECT C.id AS 'id', E.especialidad AS 'especialidad', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita', C.hora_fin AS 'hora_fin', C.estado AS "estado", U.id AS 'id_patient', P.id AS 'id_professional', U.genero AS 'genero'
     FROM usuarios U
-    JOIN Citas C
+    JOIN citas C
     ON U.id=C.alumno_id
     JOIN usuarios P
     ON C.profesional_id=P.id
-    JOIN Especialidades E
+    JOIN especialidades E
     ON P.id=E.usuario_id
     WHERE U.tipo_usuario='alumno' AND P.tipo_usuario='profesional' and C.id = ? `, [id])
     console.log(data)
