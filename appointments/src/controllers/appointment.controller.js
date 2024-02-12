@@ -46,8 +46,8 @@ export const getAppointment = async (req, res) => {
 }
 
 export const createAppointment = async (req, res) => {
-  const { profesional_id, alumno_id, fecha, hora, hora_fin, estado } = req.body
-  const rows = await connection.query('INSERT INTO citas (profesional_id, alumno_id, fecha, hora, hora_fin, estado) VALUES (?,?,?,?,?,?) ', [profesional_id, alumno_id, fecha, hora, hora_fin, estado])
+  const { profesional_id, alumno_id, fecha, hora, estado } = req.body
+  const rows = await connection.query('INSERT INTO citas (profesional_id, alumno_id, fecha, hora, estado) VALUES (?,?,?,?,?) ', [profesional_id, alumno_id, fecha, hora, estado])
 
   res.json({
     id: rows.insertId,
@@ -55,19 +55,18 @@ export const createAppointment = async (req, res) => {
     alumno_id,
     fecha,
     hora,
-    hora_fin,
     estado
   })
 }
 
 export const updateAppointment = async (req, res) => {
   const { id } = req.params
-  const { profesional_id, alumno_id, fecha, hora, hora_fin, estado } = req.body
+  const { profesional_id, alumno_id, fecha, hora, estado } = req.body
 
   const [selectedCita] = await connection.query('SELECT * FROM citas WHERE id = ? ', [id])
   console.log('selectedCita', selectedCita);
   try {
-    const data = await connection.query('UPDATE citas SET profesional_id = ?, alumno_id = ?, fecha = ?, hora= ?, hora_fin= ?, estado = ? WHERE id = ?', [profesional_id, alumno_id, fecha, hora, hora_fin, estado, id])
+    const data = await connection.query('UPDATE citas SET profesional_id = ?, alumno_id = ?, fecha = ?, hora= ?, estado = ? WHERE id = ?', [profesional_id, alumno_id, fecha, hora, estado, id])
 
     if (data.length <= 0) return res.status(404).json({ message: 'Cita no encontrada' })
     return res.json(data[0])
@@ -103,7 +102,7 @@ export const deleteAppointment = async (req, res) => {
 
 export const getAppointmentsSimple = async (req, res) => {
   try {
-    const data = await connection.query(`SELECT C.id AS 'id', E.especialidad AS 'especialidad', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita', C.hora_fin AS 'hora_fin', C.estado AS "estado", U.id AS 'id_patient', P.id AS 'id_professional'
+    const data = await connection.query(`SELECT C.id AS 'id', E.especialidad AS 'especialidad', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita', C.estado AS "estado", U.id AS 'id_patient', P.id AS 'id_professional'
     FROM usuarios U
     JOIN citas C
     ON U.id=C.alumno_id
@@ -126,7 +125,7 @@ export const getAppointmentsSimple = async (req, res) => {
 export const getAppointmentsSimpleUser = async (req, res) => {
   const { id } = req.params
   try {
-    const data = await connection.query(`SELECT C.id AS 'id', E.especialidad AS 'especialidad', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita', C.hora_fin AS 'hora_fin', C.estado AS "estado", U.id AS 'id_patient', P.id AS 'id_professional', U.genero AS 'genero'
+    const data = await connection.query(`SELECT C.id AS 'id', E.especialidad AS 'especialidad', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita', C.estado AS "estado", U.id AS 'id_patient', P.id AS 'id_professional', U.genero AS 'genero'
     FROM usuarios U
     JOIN citas C
     ON U.id=C.alumno_id
