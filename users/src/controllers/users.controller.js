@@ -2,7 +2,7 @@ import { connection } from '../db.js';
 
 export const getUsers = async (req, res) => {
   try {
-    const data = await connection.query('SELECT * FROM Usuarios')
+    const data = await connection.query('SELECT * FROM usuarios')
     return res.json(data)
   } catch (error) {
     return res.json(
@@ -16,8 +16,8 @@ export const getUsers = async (req, res) => {
 export const getProfessionals = async (req, res) => {
   try {
     const data = await connection.query(`SELECT U.id AS 'id', U.nombre AS 'nombre', U.apellido AS 'apellido', U.telefono AS 'telefono', U.email AS 'email', U.contrasena AS 'contrasena', U.fecha_nacimiento AS 'fecha_nacimiento', U.genero AS 'genero', U.tipo_usuario AS 'tipo_usuario', E.especialidad AS 'especialidad', U.status AS 'estado'  
-    FROM Usuarios U
-    JOIN Especialidades E
+    FROM usuarios U
+    JOIN especialidades E
     ON U.id=E.usuario_id
     WHERE U.tipo_usuario='profesional'`)
     return res.json(data)
@@ -33,7 +33,7 @@ export const getProfessionals = async (req, res) => {
 export const getUser = async (req, res) => {
   const { id } = req.params
   try {
-    const data = await connection.query('SELECT * FROM Usuarios WHERE id = ? ', [id])
+    const data = await connection.query('SELECT * FROM usuarios WHERE id = ? ', [id])
     if (data.length <= 0) return res.status(404).json({ message: 'Usuario no encontrado' })
     return res.json(data[0])
   } catch (error) {
@@ -49,8 +49,8 @@ export const getProfessional = async (req, res) => {
   const { id } = req.params
   try {
     const data = await connection.query(`SELECT U.id AS 'id', U.nombre AS 'nombre', U.apellido AS 'apellido', U.telefono AS 'telefono', U.email AS 'email', U.contrasena AS 'contrasena', U.fecha_nacimiento AS 'fecha_nacimiento', U.genero AS 'genero', U.tipo_usuario AS 'tipo_usuario', E.especialidad AS 'especialidad'  
-    FROM Usuarios U
-    JOIN Especialidades E
+    FROM usuarios U
+    JOIN especialidades E
     ON U.id=E.usuario_id
     WHERE U.id= ? `, [id])
 
@@ -67,7 +67,7 @@ export const getProfessional = async (req, res) => {
 export const createUsers = async (req, res) => {
   const { nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario } = req.body
   try {
-    const rows = await connection.query('INSERT INTO Usuarios (nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario) VALUES (?,?,?,?,?,?,?,?) ', [nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario])
+    const rows = await connection.query('INSERT INTO usuarios (nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario) VALUES (?,?,?,?,?,?,?,?) ', [nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario])
 
     res.json({
       id: rows.insertId,
@@ -93,9 +93,9 @@ export const createDoctor = async (req, res) => {
   const { nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario, especialidad, status } = req.body
 
    try {
-    const rows = await connection.query('INSERT INTO Usuarios (nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario, status) VALUES (?,?,?,?,?,?,?,?,?) ', [nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario, status])
+    const rows = await connection.query('INSERT INTO usuarios (nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario, status) VALUES (?,?,?,?,?,?,?,?,?) ', [nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario, status])
  
-    const rows_especialidad = await connection.query('INSERT INTO Especialidades (especialidad, usuario_id) VALUES (?, ?)', [especialidad, rows.insertId])
+    const rows_especialidad = await connection.query('INSERT INTO especialidades (especialidad, usuario_id) VALUES (?, ?)', [especialidad, rows.insertId])
     console.log('ROWS', rows, rows_especialidad)
    
     if (rows.length <= 0 || rows_especialidad.length >= 0) return res.status(404).json({ message: 'Cita no encontrada' })
@@ -127,10 +127,10 @@ export const updateUsers = async (req, res) => {
   const { id } = req.params
   const { nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario, status } = req.body
 
-  const [selectedUser] = await connection.query('SELECT * FROM Usuarios WHERE id = ? ', [id])
+  const [selectedUser] = await connection.query('SELECT * FROM usuarios WHERE id = ? ', [id])
 
   try {
-    const data = await connection.query('UPDATE Usuarios SET nombre = ?, apellido = ?, telefono = ?, email = ?, contrasena = ?, fecha_nacimiento = ?, genero = ?, tipo_usuario = ?, status = ? WHERE id = ?', [nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario, status, id])
+    const data = await connection.query('UPDATE usuarios SET nombre = ?, apellido = ?, telefono = ?, email = ?, contrasena = ?, fecha_nacimiento = ?, genero = ?, tipo_usuario = ?, status = ? WHERE id = ?', [nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario, status, id])
 
     if (data.length <= 0) return res.status(404).json({ message: 'Usuario no encontrado' })
     return res.json(data[0])
@@ -145,7 +145,7 @@ export const updateUsers = async (req, res) => {
 
 export const deleteUsers = async (req, res) => {
   const { id } = req.params
-  const data = await connection.query('DELETE FROM Usuarios WHERE id = ? ', [id])
+  const data = await connection.query('DELETE FROM usuarios WHERE id = ? ', [id])
 
   console.log(data);
   if (data.length <= 0) return res.status(404).json({ message: 'Usuario no encontrado' })
@@ -158,9 +158,9 @@ export const updateDoctor = async (req, res) => {
   const { nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario, status, especialidad } = req.body
 
   try {
-    const data = await connection.query('UPDATE Usuarios SET nombre = ?, apellido = ?, telefono = ?, email = ?, contrasena = ?, fecha_nacimiento = ?, genero = ?, tipo_usuario = ? , status = ? WHERE id = ?', [nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario, status, id])
+    const data = await connection.query('UPDATE usuarios SET nombre = ?, apellido = ?, telefono = ?, email = ?, contrasena = ?, fecha_nacimiento = ?, genero = ?, tipo_usuario = ? , status = ? WHERE id = ?', [nombre, apellido, telefono, email, contrasena, fecha_nacimiento, genero, tipo_usuario, status, id])
 
-    const especialidad_user = await connection.query('UPDATE Especialidades SET especialidad = ? WHERE usuario_id = ?', [especialidad, id])
+    const especialidad_user = await connection.query('UPDATE especialidades SET especialidad = ? WHERE usuario_id = ?', [especialidad, id])
 
     if (data.length <= 0) return res.status(404).json({ message: 'Usuario no encontrado' })
     return res.json(data[0])
@@ -178,7 +178,7 @@ export const changeStatus = async (req, res) => {
   const { status } = req.body
 
   try {
-    const data = await connection.query('UPDATE Usuarios SET status = ? WHERE id = ?', [status, id])
+    const data = await connection.query('UPDATE usuarios SET status = ? WHERE id = ?', [status, id])
 
     if (data.affectedRows === 0) return res.status(404).json({ message: 'Usuario no encontrado' })
     return res.json(data[0])
