@@ -3,10 +3,10 @@ import { connection } from '../db.js';
 export const getAppointments = async (req, res) => {
   try {
     const data = await connection.query(`SELECT C.id AS 'id', U.nombre AS 'nombre_alumno', U.apellido AS 'apellido_alumno', P.nombre AS 'nombre_profesional', P.apellido AS 'apellido_profesional', E.especialidad AS 'especialidad', U.email AS 'mail_alumno', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita', U.telefono AS 'telefono_alumno', U.email AS 'email_alumno', C.estado AS "estado"
-    FROM Usuarios U
+    FROM usuarios U
     JOIN Citas C
     ON U.id=C.alumno_id
-    JOIN Usuarios P
+    JOIN usuarios P
     ON C.profesional_id=P.id
     JOIN Especialidades E
     ON P.id=E.usuario_id
@@ -25,10 +25,10 @@ export const getAppointment = async (req, res) => {
   const { id } = req.params
   try {
     const data = await connection.query(`SELECT C.id AS 'id', U.nombre AS 'nombre_alumno', U.apellido AS 'apellido_alumno', P.nombre AS 'nombre_profesional', P.apellido AS 'apellido_profesional', E.especialidad AS 'especialidad', U.email AS 'mail_alumno', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita', U.telefono AS 'telefono_alumno', U.email AS 'email_alumno', C.estado AS "estado"
-    FROM Usuarios U
+    FROM usuarios U
     JOIN Citas C
     ON U.id=C.alumno_id
-    JOIN Usuarios P
+    JOIN usuarios P
     ON C.profesional_id=P.id
     JOIN Especialidades E
     ON P.id=E.usuario_id
@@ -104,10 +104,10 @@ export const deleteAppointment = async (req, res) => {
 export const getAppointmentsSimple = async (req, res) => {
   try {
     const data = await connection.query(`SELECT C.id AS 'id', E.especialidad AS 'especialidad', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita', C.hora_fin AS 'hora_fin', C.estado AS "estado", U.id AS 'id_patient', P.id AS 'id_professional'
-    FROM Usuarios U
+    FROM usuarios U
     JOIN Citas C
     ON U.id=C.alumno_id
-    JOIN Usuarios P
+    JOIN usuarios P
     ON C.profesional_id=P.id
     JOIN Especialidades E
     ON P.id=E.usuario_id
@@ -127,10 +127,10 @@ export const getAppointmentsSimpleUser = async (req, res) => {
   const { id } = req.params
   try {
     const data = await connection.query(`SELECT C.id AS 'id', E.especialidad AS 'especialidad', C.fecha AS 'fecha_cita', C.hora AS 'hora_cita', C.hora_fin AS 'hora_fin', C.estado AS "estado", U.id AS 'id_patient', P.id AS 'id_professional', U.genero AS 'genero'
-    FROM Usuarios U
+    FROM usuarios U
     JOIN Citas C
     ON U.id=C.alumno_id
-    JOIN Usuarios P
+    JOIN usuarios P
     ON C.profesional_id=P.id
     JOIN Especialidades E
     ON P.id=E.usuario_id
